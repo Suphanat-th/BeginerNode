@@ -1,0 +1,42 @@
+version: '3'
+
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device : F:/DB-Maria
+services :
+  node-treeview:
+    container_name : node_beginner
+    build: .
+    ports:
+      - "8000:3000"
+
+  db :
+    image: mariadb:10.6
+    restart: always
+    container_name : db-maria
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    ports :
+      - "3306:3306"
+    volumes:
+      - mariadb:/var/lib/mysql
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   container_name : adminer
+  #   ports:
+  #     - "8080:8080"
+  phpmyadmin :
+    image: phpmyadmin
+    restart: always
+    container_name : phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_ROOT_PASSWORD = 1234
